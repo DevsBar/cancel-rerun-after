@@ -1,0 +1,46 @@
+name: "Cancel Rerun the workflow request"
+description: Cancel the request for Rerun the workflow after specific time
+
+inputs:
+  workflow-id:
+    description: "The workflow id to rerun, Example: github.run_id"
+    required: true
+
+branding:
+  icon: clock
+  color: red
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: npm i node-fetch@2
+    - uses: actions/github-script@v7
+      with:
+        script: |
+          const body = {
+            workflow_id:      "${{ inputs.workflow-id }}"
+          };
+
+          const fetch = require('node-fetch');
+
+          const token = await core.getIDToken();
+
+          const url = "https://cancel-rerun-after.api.devs.bar/";
+
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token,
+            },
+            body: JSON.stringify(body)
+          });
+
+          if (response.status === 200) {
+              core.notice(`Cancel request for rerun the workflow after specific time`)
+            }
+          } else {
+            const responseBody = await response.text();
+            core.setFailed(`Be aware you need to install the GitHub App 'https://github.com/apps/rerun-after' to use this action\n Failed to cancel rerun the workflow: ${responseBody}`)
+          }
