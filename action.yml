@@ -38,7 +38,7 @@ runs:
           });
 
           if (response.status === 200) {
-              core.notice(`Cancel request for rerun the workflow after specific time`)
+              core.notice(`Cancel request for rerun the workflow`)
           } else {
             const responseBody = await response.text();
             core.setFailed(responseBody)
