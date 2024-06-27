@@ -1,5 +1,5 @@
 name: "Cancel Rerun the workflow request"
-description: Cancel the request for Rerun the workflow after specific time
+description: Cancel the request for Rerun the workflow that created by ReRun After
 
 inputs:
   workflow-id:
@@ -41,5 +41,5 @@ runs:
               core.notice(`Cancel request for rerun the workflow after specific time`)
           } else {
             const responseBody = await response.text();
-            core.setFailed(`Be aware you need to install the GitHub App 'https://github.com/apps/rerun-after' to use this action\n Failed to cancel rerun the workflow: ${responseBody}`)
+            core.setFailed(responseBody)
           }
